@@ -22,12 +22,11 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.deidentifier.arx.ARXConfiguration;
-import org.deidentifier.arx.Data;
-import org.deidentifier.arx.DataSubset;
 import org.deidentifier.arx.criteria.DPresence;
 import org.deidentifier.arx.criteria.KAnonymity;
 import org.deidentifier.arx.metric.Metric;
 import org.deidentifier.arx.metric.Metric.AggregateFunction;
+import org.deidentifier.arx.test.ConfigurationUtil.Dataset;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -55,28 +54,28 @@ public class TestUtilityMetricsPrecomputation extends AbstractTestUtilityMetrics
         return Arrays.asList(new Object[][] {
                                               
                                               // entropy: criterion monotone metric monotone
-                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.0d).addCriterion(new KAnonymity(5)), "occupation", "./data/adult.csv", Metric.createEntropyMetric(true), Metric.createPrecomputedEntropyMetric(threshold, true)) },
-                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.0d).addCriterion(new DPresence(0.05, 0.15, DataSubset.create(Data.create("./data/adult.csv", ';'), Data.create("./data/adult_subset.csv", ';')))), "occupation", "./data/adult.csv", Metric.createEntropyMetric(true), Metric.createPrecomputedEntropyMetric(threshold, true)) },
+                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.0d).addCriterion(new KAnonymity(5)), "occupation", Dataset.ADULT, Metric.createEntropyMetric(true), Metric.createPrecomputedEntropyMetric(threshold, true)) },
+                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.0d).addCriterion(new DPresence(0.05, 0.15, ConfigurationUtil.getSubset(Dataset.ADULT))), "occupation", Dataset.ADULT, Metric.createEntropyMetric(true), Metric.createPrecomputedEntropyMetric(threshold, true)) },
                                               
                                               // entropy: criterion monotone metric non-monotone
-                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.0d).addCriterion(new KAnonymity(5)), "occupation", "./data/adult.csv", Metric.createEntropyMetric(false), Metric.createPrecomputedEntropyMetric(threshold, false)) },
-                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.0d).addCriterion(new DPresence(0.05, 0.15, DataSubset.create(Data.create("./data/adult.csv", ';'), Data.create("./data/adult_subset.csv", ';')))), "occupation", "./data/adult.csv", Metric.createEntropyMetric(false), Metric.createPrecomputedEntropyMetric(threshold, false)) },
+                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.0d).addCriterion(new KAnonymity(5)), "occupation", Dataset.ADULT, Metric.createEntropyMetric(false), Metric.createPrecomputedEntropyMetric(threshold, false)) },
+                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.0d).addCriterion(new DPresence(0.05, 0.15, ConfigurationUtil.getSubset(Dataset.ADULT))), "occupation", Dataset.ADULT, Metric.createEntropyMetric(false), Metric.createPrecomputedEntropyMetric(threshold, false)) },
                                               
                                               // loss: criterion monotone metric monotone
-                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.0d).addCriterion(new KAnonymity(5)), "occupation", "./data/adult.csv", Metric.createLossMetric(AggregateFunction.RANK), Metric.createPrecomputedLossMetric(threshold, AggregateFunction.RANK)) },
-                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.0d).addCriterion(new DPresence(0.05, 0.15, DataSubset.create(Data.create("./data/adult.csv", ';'), Data.create("./data/adult_subset.csv", ';')))), "occupation", "./data/adult.csv", Metric.createLossMetric(AggregateFunction.RANK), Metric.createPrecomputedLossMetric(threshold, AggregateFunction.RANK)) },
+                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.0d).addCriterion(new KAnonymity(5)), "occupation", Dataset.ADULT, Metric.createLossMetric(AggregateFunction.RANK), Metric.createPrecomputedLossMetric(threshold, AggregateFunction.RANK)) },
+                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.0d).addCriterion(new DPresence(0.05, 0.15, ConfigurationUtil.getSubset(Dataset.ADULT))), "occupation", Dataset.ADULT, Metric.createLossMetric(AggregateFunction.RANK), Metric.createPrecomputedLossMetric(threshold, AggregateFunction.RANK)) },
                                               
                                               // entropy: criterion non-monotone metric monotone
-                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.5d).addCriterion(new KAnonymity(5)), "occupation", "./data/adult.csv", Metric.createEntropyMetric(true), Metric.createPrecomputedEntropyMetric(threshold, true)) },
-                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.5d).addCriterion(new DPresence(0.05, 0.15, DataSubset.create(Data.create("./data/adult.csv", ';'), Data.create("./data/adult_subset.csv", ';')))), "occupation", "./data/adult.csv", Metric.createEntropyMetric(true), Metric.createPrecomputedEntropyMetric(threshold, true)) },
+                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.5d).addCriterion(new KAnonymity(5)), "occupation", Dataset.ADULT, Metric.createEntropyMetric(true), Metric.createPrecomputedEntropyMetric(threshold, true)) },
+                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.5d).addCriterion(new DPresence(0.05, 0.15, ConfigurationUtil.getSubset(Dataset.ADULT))), "occupation", Dataset.ADULT, Metric.createEntropyMetric(true), Metric.createPrecomputedEntropyMetric(threshold, true)) },
                                               
                                               // entropy: criterion non-monotone metric non-monotone
-                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.5d).addCriterion(new KAnonymity(5)), "occupation", "./data/adult.csv", Metric.createEntropyMetric(false), Metric.createPrecomputedEntropyMetric(threshold, false)) },
-                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.5d).addCriterion(new DPresence(0.05, 0.15, DataSubset.create(Data.create("./data/adult.csv", ';'), Data.create("./data/adult_subset.csv", ';')))), "occupation", "./data/adult.csv", Metric.createEntropyMetric(false), Metric.createPrecomputedEntropyMetric(threshold, false)) },
+                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.5d).addCriterion(new KAnonymity(5)), "occupation", Dataset.ADULT, Metric.createEntropyMetric(false), Metric.createPrecomputedEntropyMetric(threshold, false)) },
+                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.5d).addCriterion(new DPresence(0.05, 0.15, ConfigurationUtil.getSubset(Dataset.ADULT))), "occupation", Dataset.ADULT, Metric.createEntropyMetric(false), Metric.createPrecomputedEntropyMetric(threshold, false)) },
                                               
                                               // loss: criterion non-monotone metric monotone
-                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.5d).addCriterion(new KAnonymity(5)), "occupation", "./data/adult.csv", Metric.createLossMetric(AggregateFunction.RANK), Metric.createPrecomputedLossMetric(threshold, AggregateFunction.RANK)) },
-                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.5d).addCriterion(new DPresence(0.05, 0.15, DataSubset.create(Data.create("./data/adult.csv", ';'), Data.create("./data/adult_subset.csv", ';')))), "occupation", "./data/adult.csv", Metric.createLossMetric(AggregateFunction.RANK), Metric.createPrecomputedLossMetric(threshold, AggregateFunction.RANK)) },
+                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.5d).addCriterion(new KAnonymity(5)), "occupation", Dataset.ADULT, Metric.createLossMetric(AggregateFunction.RANK), Metric.createPrecomputedLossMetric(threshold, AggregateFunction.RANK)) },
+                                              { new ARXUtilityMetricsTestCase(ARXConfiguration.create(0.5d).addCriterion(new DPresence(0.05, 0.15, ConfigurationUtil.getSubset(Dataset.ADULT))), "occupation", Dataset.ADULT, Metric.createLossMetric(AggregateFunction.RANK), Metric.createPrecomputedLossMetric(threshold, AggregateFunction.RANK)) },
                                               
         });
     }

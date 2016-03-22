@@ -23,7 +23,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.Writer;
 import java.lang.management.ManagementFactory;
@@ -31,21 +30,15 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.deidentifier.arx.ARXAnonymizer;
 import org.deidentifier.arx.ARXConfiguration;
 import org.deidentifier.arx.ARXLattice.ARXNode;
 import org.deidentifier.arx.ARXLattice.Anonymity;
 import org.deidentifier.arx.ARXResult;
-import org.deidentifier.arx.AttributeType;
-import org.deidentifier.arx.AttributeType.Hierarchy;
 import org.deidentifier.arx.Data;
-import org.deidentifier.arx.criteria.LDiversity;
-import org.deidentifier.arx.criteria.TCloseness;
 import org.deidentifier.arx.gui.resources.Resources;
-import org.deidentifier.arx.io.CSVHierarchyInput;
+import org.deidentifier.arx.test.ConfigurationUtil.Dataset;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -68,32 +61,32 @@ public abstract class AbstractAnonymizationTest extends AbstractTest {
     public static class ARXAnonymizationTestCase {
         
         /** TODO */
-        private static int counter;
-        
+        private static int      counter;
+                                
         /** TODO */
-        public final int id = counter++;
-        
+        public final int        id = counter++;
+                                   
         /** TODO */
         public ARXConfiguration config;
-        
+                                
         /** TODO */
-        public String dataset;
-        
+        public Dataset          dataset;
+                                
         /** TODO */
-        public String sensitiveAttribute;
-        
+        public String           sensitiveAttribute;
+                                
         /** TODO */
-        public String optimalInformationLoss;
-        
+        public String           optimalInformationLoss;
+                                
         /** TODO */
-        public int[] optimalTransformation;
-        
+        public int[]            optimalTransformation;
+                                
         /** TODO */
-        public boolean practical;
-        
+        public boolean          practical;
+                                
         /** TODO */
-        public int[] statistics;
-        
+        public int[]            statistics;
+                                
         /**
          * Creates a new instance.
          *
@@ -104,7 +97,7 @@ public abstract class AbstractAnonymizationTest extends AbstractTest {
          * @param practical
          */
         public ARXAnonymizationTestCase(final ARXConfiguration config,
-                                        final String dataset,
+                                        final Dataset dataset,
                                         final double optimalInformationLoss,
                                         final int[] optimalTransformation,
                                         final boolean practical) {
@@ -122,7 +115,7 @@ public abstract class AbstractAnonymizationTest extends AbstractTest {
          * @param statistics
          */
         public ARXAnonymizationTestCase(final ARXConfiguration config,
-                                        final String dataset,
+                                        final Dataset dataset,
                                         final double optimalInformationLoss,
                                         final int[] optimalTransformation,
                                         final boolean practical,
@@ -132,100 +125,109 @@ public abstract class AbstractAnonymizationTest extends AbstractTest {
         
         /**
          * Creates a new instance.
-         *
          * @param config
-         * @param sensitiveAttribute
          * @param dataset
-         * @param optimalInformationLoss
-         * @param optimalTransformation
-         * @param practical
-         */
-        public ARXAnonymizationTestCase(final ARXConfiguration config,
-                                        final String sensitiveAttribute,
-                                        final String dataset,
-                                        final double optimalInformationLoss,
-                                        final int[] optimalTransformation,
-                                        final boolean practical) {
-            this(config, sensitiveAttribute, dataset, optimalInformationLoss, optimalTransformation, practical, null);
-        }
-        
-        /**
-         * Creates a new instance.
-         *
-         * @param config
+         * @param datasetSubset
          * @param sensitiveAttribute
-         * @param dataset
          * @param optimalInformationLoss
          * @param optimalTransformation
          * @param practical
          * @param statistics
          */
-        public ARXAnonymizationTestCase(final ARXConfiguration config,
-                                        final String sensitiveAttribute,
-                                        final String dataset,
-                                        final double optimalInformationLoss,
-                                        final int[] optimalTransformation,
-                                        final boolean practical,
-                                        int[] statistics) {
+        public ARXAnonymizationTestCase(ARXConfiguration config, Dataset dataset, String sensitiveAttribute, String optimalInformationLoss, int[] optimalTransformation, boolean practical, int[] statistics) {
             this.config = config;
-            this.sensitiveAttribute = sensitiveAttribute;
             this.dataset = dataset;
-            this.optimalInformationLoss = String.valueOf(optimalInformationLoss);
-            this.optimalTransformation = optimalTransformation;
-            this.practical = practical;
-            this.statistics = statistics;
-        }
-        
-        /**
-         * Creates a new instance.
-         *
-         * @param config
-         * @param sensitiveAttribute
-         * @param dataset
-         * @param optimalInformationLoss
-         * @param optimalTransformation
-         * @param practical
-         */
-        public ARXAnonymizationTestCase(final ARXConfiguration config,
-                                        final String sensitiveAttribute,
-                                        final String dataset,
-                                        final String optimalInformationLoss,
-                                        final int[] optimalTransformation,
-                                        final boolean practical) {
-            this(config, sensitiveAttribute, dataset, optimalInformationLoss, optimalTransformation, practical, null);
-        }
-        
-        /**
-         * Creates a new instance.
-         *
-         * @param config
-         * @param sensitiveAttribute
-         * @param dataset
-         * @param optimalInformationLoss
-         * @param optimalTransformation
-         * @param practical
-         * @param statistics
-         */
-        public ARXAnonymizationTestCase(final ARXConfiguration config,
-                                        final String sensitiveAttribute,
-                                        final String dataset,
-                                        final String optimalInformationLoss,
-                                        final int[] optimalTransformation,
-                                        final boolean practical,
-                                        int[] statistics) {
-            this.config = config;
             this.sensitiveAttribute = sensitiveAttribute;
-            this.dataset = dataset;
             this.optimalInformationLoss = optimalInformationLoss;
             this.optimalTransformation = optimalTransformation;
             this.practical = practical;
             this.statistics = statistics;
         }
         
+        /**
+         * Creates a new instance.
+         *
+         * @param config
+         * @param sensitiveAttribute
+         * @param dataset
+         * @param optimalInformationLoss
+         * @param optimalTransformation
+         * @param practical
+         */
+        public ARXAnonymizationTestCase(final ARXConfiguration config,
+                                        final String sensitiveAttribute,
+                                        final Dataset dataset,
+                                        final double optimalInformationLoss,
+                                        final int[] optimalTransformation,
+                                        final boolean practical) {
+            this(config, sensitiveAttribute, dataset, optimalInformationLoss, optimalTransformation, practical, null);
+        }
+        
+        /**
+         * Creates a new instance.
+         *
+         * @param config
+         * @param sensitiveAttribute
+         * @param dataset
+         * @param optimalInformationLoss
+         * @param optimalTransformation
+         * @param practical
+         * @param statistics
+         */
+        public ARXAnonymizationTestCase(final ARXConfiguration config,
+                                        final String sensitiveAttribute,
+                                        final Dataset dataset,
+                                        final double optimalInformationLoss,
+                                        final int[] optimalTransformation,
+                                        final boolean practical,
+                                        int[] statistics) {
+            this(config, dataset, sensitiveAttribute, String.valueOf(optimalInformationLoss), optimalTransformation, practical, statistics);
+        }
+        
+        /**
+         * Creates a new instance.
+         *
+         * @param config
+         * @param sensitiveAttribute
+         * @param dataset
+         * @param optimalInformationLoss
+         * @param optimalTransformation
+         * @param practical
+         */
+        public ARXAnonymizationTestCase(final ARXConfiguration config,
+                                        final String sensitiveAttribute,
+                                        final Dataset dataset,
+                                        final String optimalInformationLoss,
+                                        final int[] optimalTransformation,
+                                        final boolean practical) {
+            this(config, sensitiveAttribute, dataset, optimalInformationLoss, optimalTransformation, practical, null);
+        }
+        
+        /**
+         * Creates a new instance.
+         *
+         * @param config
+         * @param sensitiveAttribute
+         * @param dataset
+         * @param optimalInformationLoss
+         * @param optimalTransformation
+         * @param practical
+         * @param statistics
+         */
+        public ARXAnonymizationTestCase(final ARXConfiguration config,
+                                        final String sensitiveAttribute,
+                                        final Dataset dataset,
+                                        final String optimalInformationLoss,
+                                        final int[] optimalTransformation,
+                                        final boolean practical,
+                                        int[] statistics) {
+            this(config, dataset, sensitiveAttribute, optimalInformationLoss, optimalTransformation, practical, statistics);
+        }
+        
         @Override
         public String toString() {
-            return config.getCriteria() + "-" + config.getMaxOutliers() + "-" + config.getMetric() + "-" + dataset + "-PM:" +
-                   config.isPracticalMonotonicity();
+            return this.config.getCriteria() + "-" + this.config.getMaxOutliers() + "-" + this.config.getMetric() + "-" + this.dataset + "-PM:" +
+                   this.config.isPracticalMonotonicity();
         }
     }
     
@@ -251,62 +253,13 @@ public abstract class AbstractAnonymizationTest extends AbstractTest {
         return builder.toString();
     }
     
-    /**
-     * Returns the data object for the test case.
-     *
-     * @param testCase
-     * @return
-     * @throws IOException
-     */
-    public static Data getDataObject(final ARXAnonymizationTestCase testCase) throws IOException {
-        
-        final Data data = Data.create(testCase.dataset, ';');
-        
-        // Read generalization hierachies
-        final FilenameFilter hierarchyFilter = new FilenameFilter() {
-            @Override
-            public boolean accept(final File dir, final String name) {
-                if (name.matches(testCase.dataset.substring(testCase.dataset.lastIndexOf("/") + 1, testCase.dataset.length() - 4) +
-                                 "_hierarchy_(.)+.csv")) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        };
-        
-        final File testDir = new File(testCase.dataset.substring(0, testCase.dataset.lastIndexOf("/")));
-        final File[] genHierFiles = testDir.listFiles(hierarchyFilter);
-        final Pattern pattern = Pattern.compile("_hierarchy_(.*?).csv");
-        
-        for (final File file : genHierFiles) {
-            final Matcher matcher = pattern.matcher(file.getName());
-            if (matcher.find()) {
-                
-                final CSVHierarchyInput hier = new CSVHierarchyInput(file, ';');
-                final String attributeName = matcher.group(1);
-                
-                if (!attributeName.equalsIgnoreCase(testCase.sensitiveAttribute)) {
-                    data.getDefinition().setAttributeType(attributeName, Hierarchy.create(hier.getHierarchy()));
-                } else { // sensitive attribute
-                    if (testCase.config.containsCriterion(LDiversity.class) || testCase.config.containsCriterion(TCloseness.class)) {
-                        data.getDefinition().setAttributeType(attributeName, AttributeType.SENSITIVE_ATTRIBUTE);
-                    }
-                }
-                
-            }
-        }
-        
-        return data;
-    }
-    
     /** The test case. */
     protected final ARXAnonymizationTestCase testCase;
-    
+                                             
     /** To access the test name */
     @Rule
-    public TestName name = new TestName();
-    
+    public TestName                          name = new TestName();
+                                                  
     /**
      * Creates a new instance.
      *
@@ -340,21 +293,21 @@ public abstract class AbstractAnonymizationTest extends AbstractTest {
             }
         }
         
-        final Data data = getDataObject(testCase);
+        final Data data = ConfigurationUtil.getDataObject(this.testCase);
         
         // Create an instance of the anonymizer
         final ARXAnonymizer anonymizer = new ARXAnonymizer();
-        testCase.config.setPracticalMonotonicity(testCase.practical);
+        this.testCase.config.setPracticalMonotonicity(this.testCase.practical);
         
         // Test or warmup
-        ARXResult result = anonymizer.anonymize(data, testCase.config);
+        ARXResult result = anonymizer.anonymize(data, this.testCase.config);
         
         // Benchmark
         if (benchmark) {
             
             String version = System.getProperty("Version");
             String path = System.getProperty("Benchmark");
-            if (path == null || path.length()==0) {
+            if ((path == null) || (path.length() == 0)) {
                 path = ".";
             }
             String testClass = this.getClass().getSimpleName();
@@ -364,7 +317,7 @@ public abstract class AbstractAnonymizationTest extends AbstractTest {
             long time2 = 0;
             for (int i = 0; i < REPETITIONS; i++) {
                 data.getHandle().release();
-                result = anonymizer.anonymize(data, testCase.config);
+                result = anonymizer.anonymize(data, this.testCase.config);
                 time2 += result.getTime();
             }
             time = (System.currentTimeMillis() - time) / REPETITIONS;
@@ -377,7 +330,7 @@ public abstract class AbstractAnonymizationTest extends AbstractTest {
             line.append(";");
             line.append(testClass);
             line.append(";");
-            line.append(testCase.id);
+            line.append(this.testCase.id);
             line.append(";");
             line.append(time);
             line.append(";");
@@ -386,27 +339,27 @@ public abstract class AbstractAnonymizationTest extends AbstractTest {
         }
         
         // check if no solution
-        if (testCase.optimalTransformation == null) {
+        if (this.testCase.optimalTransformation == null) {
             assertTrue(result.getGlobalOptimum() == null);
         } else {
             
             String lossActual = result.getGlobalOptimum().getMaximumInformationLoss().toString();
-            String lossExpected = testCase.optimalInformationLoss;
+            String lossExpected = this.testCase.optimalInformationLoss;
             
-            assertEquals(testCase.dataset + "-should: " + lossExpected + " is: " +
+            assertEquals(this.testCase.dataset + "-should: " + lossExpected + " is: " +
                          lossActual + "(" + result.getGlobalOptimum().getMinimumInformationLoss().toString() + ")",
                          lossExpected,
                          lossActual);
                          
-            if (!Arrays.equals(result.getGlobalOptimum().getTransformation(), testCase.optimalTransformation)) {
+            if (!Arrays.equals(result.getGlobalOptimum().getTransformation(), this.testCase.optimalTransformation)) {
                 System.err.println("Note: Information loss equals, but the optimum differs:");
-                System.err.println("Should: " + Arrays.toString(testCase.optimalTransformation) + " is: " +
+                System.err.println("Should: " + Arrays.toString(this.testCase.optimalTransformation) + " is: " +
                                    Arrays.toString(result.getGlobalOptimum().getTransformation()));
-                System.err.println("Test case: " + testCase.toString());
+                System.err.println("Test case: " + this.testCase.toString());
             }
         }
         
-        if (testCase.statistics != null) {
+        if (this.testCase.statistics != null) {
             
             // Collect statistics
             int[] statistics = new int[7];
@@ -435,41 +388,14 @@ public abstract class AbstractAnonymizationTest extends AbstractTest {
             }
             
             // Compare
-            String algorithmConfiguration = getAlgorithmConfiguration(testCase.config);
-            assertEquals(algorithmConfiguration + ". Mismatch: number of transformations", testCase.statistics[0], statistics[0]);
-            assertEquals(algorithmConfiguration + ". Mismatch: number of checks", testCase.statistics[1], statistics[1]);
-            assertEquals(algorithmConfiguration + ". Mismatch: number of anonymous transformations", testCase.statistics[2], statistics[2]);
-            assertEquals(algorithmConfiguration + ". Mismatch: number of non-anonymous transformations", testCase.statistics[3], statistics[3]);
-            assertEquals(algorithmConfiguration + ". Mismatch: number of probably anonymous transformations", testCase.statistics[4], statistics[4]);
-            assertEquals(algorithmConfiguration + ". Mismatch: number of probably non-anonymous transformations", testCase.statistics[5], statistics[5]);
-            assertEquals(algorithmConfiguration + ". Mismatch: number of transformations with utility available", testCase.statistics[6], statistics[6]);
-        }
-    }
-    
-    /**
-     * Appends the given value to the file
-     * @param value
-     * @param file
-     */
-    private void output(String value, String file) {
-        Writer writer = null;
-        try {
-            createHeader(file);
-            writer = new FileWriter(file, true);
-            writer = new BufferedWriter(writer);
-            writer.write(value);
-            writer.write(System.lineSeparator());
-            System.out.println(value);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (writer != null) {
-                try {
-                    writer.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            String algorithmConfiguration = getAlgorithmConfiguration(this.testCase.config);
+            assertEquals(algorithmConfiguration + ". Mismatch: number of transformations", this.testCase.statistics[0], statistics[0]);
+            assertEquals(algorithmConfiguration + ". Mismatch: number of checks", this.testCase.statistics[1], statistics[1]);
+            assertEquals(algorithmConfiguration + ". Mismatch: number of anonymous transformations", this.testCase.statistics[2], statistics[2]);
+            assertEquals(algorithmConfiguration + ". Mismatch: number of non-anonymous transformations", this.testCase.statistics[3], statistics[3]);
+            assertEquals(algorithmConfiguration + ". Mismatch: number of probably anonymous transformations", this.testCase.statistics[4], statistics[4]);
+            assertEquals(algorithmConfiguration + ". Mismatch: number of probably non-anonymous transformations", this.testCase.statistics[5], statistics[5]);
+            assertEquals(algorithmConfiguration + ". Mismatch: number of transformations with utility available", this.testCase.statistics[6], statistics[6]);
         }
     }
     
@@ -538,5 +464,32 @@ public abstract class AbstractAnonymizationTest extends AbstractTest {
      */
     private String getAlgorithmConfiguration(ARXConfiguration config) {
         return config.getMonotonicityOfPrivacy() + " monotonicity of privacy with " + config.getMonotonicityOfUtility() + " monotonicity of utility";
+    }
+    
+    /**
+     * Appends the given value to the file
+     * @param value
+     * @param file
+     */
+    private void output(String value, String file) {
+        Writer writer = null;
+        try {
+            createHeader(file);
+            writer = new FileWriter(file, true);
+            writer = new BufferedWriter(writer);
+            writer.write(value);
+            writer.write(System.lineSeparator());
+            System.out.println(value);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

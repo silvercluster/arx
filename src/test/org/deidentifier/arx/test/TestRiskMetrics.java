@@ -176,8 +176,7 @@ public class TestRiskMetrics {
         
         if (model.getPopulationUniquenessModel() == PopulationUniquenessModel.PITMAN) {
             assertTrue(populationUniqueness + "/" + sampleUniqueness, compareUniqueness(populationUniqueness, 0.27684993883653597) == 0);
-        } else
-            if (model.getPopulationUniquenessModel() == PopulationUniquenessModel.ZAYATZ) {
+        } else if (model.getPopulationUniquenessModel() == PopulationUniquenessModel.ZAYATZ) {
             assertTrue(populationUniqueness + "/" + sampleUniqueness, compareUniqueness(populationUniqueness, 0.3207402393466189) == 0);
         } else {
             fail("Unexpected convergence of SNB");
@@ -198,16 +197,6 @@ public class TestRiskMetrics {
         populationUniqueness = model.getFractionOfUniqueTuplesDankar();
         assertTrue(populationUniqueness + "/" + sampleUniqueness, compareUniqueness(populationUniqueness, 0.5142895033485844) == 0);
         assertTrue(populationUniqueness + "/" + sampleUniqueness, compareUniqueness(populationUniqueness, sampleUniqueness) == 0);
-    }
-    
-    /**
-     * Compares two uniqueness measures with four significant digits
-     * @param val1
-     * @param val2
-     * @return
-     */
-    private int compareUniqueness(double val1, double val2) {
-        return Integer.compare((int) (val1 * 10000d), (int) (val2 * 10000d));
     }
     
     /**
@@ -237,6 +226,16 @@ public class TestRiskMetrics {
         
         // Risk after anonymization
         assertTrue(getAnonymizedData(data).getRiskEstimator(ARXPopulationModel.create(0.1d)).getSampleBasedReidentificationRisk().getHighestRisk() == 0.5d);
+    }
+    
+    /**
+     * Compares two uniqueness measures with four significant digits
+     * @param val1
+     * @param val2
+     * @return
+     */
+    private int compareUniqueness(double val1, double val2) {
+        return Integer.compare((int) (val1 * 10000d), (int) (val2 * 10000d));
     }
     
     /**

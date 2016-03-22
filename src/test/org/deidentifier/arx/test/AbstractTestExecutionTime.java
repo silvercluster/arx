@@ -35,7 +35,7 @@ import org.junit.Test;
  * @author Florian Kohlmayer
  */
 public abstract class AbstractTestExecutionTime extends AbstractAnonymizationTest {
-
+    
     /**
      * Creates a new instance.
      *
@@ -44,34 +44,35 @@ public abstract class AbstractTestExecutionTime extends AbstractAnonymizationTes
     public AbstractTestExecutionTime(final ARXAnonymizationTestCase testCase) {
         super(testCase);
     }
-
+    
     /**
      * 
      *
      * @throws IOException
      */
+    @Override
     @Test
     public void test() throws IOException {
-
-        final Data data = getDataObject(testCase);
-
+        
+        final Data data = ConfigurationUtil.getDataObject(this.testCase);
+        
         // Create an instance of the anonymizer
         final ARXAnonymizer anonymizer = new ARXAnonymizer();
-        testCase.config.setPracticalMonotonicity(testCase.practical);
-
+        this.testCase.config.setPracticalMonotonicity(this.testCase.practical);
+        
         // Warm up
         System.out.println("Experiment:");
-        System.out.println(" - Dataset: " + testCase.dataset);
-        System.out.println(" - Utility measure: " + testCase.config.getMetric().toString());
-        System.out.println(" - Practical monotonicity: " + testCase.practical);
-        System.out.println(" - Suppression limit: " + testCase.config.getMaxOutliers());
-        System.out.println(" - Privacy model: " + getPrivacyModel(testCase.config));
+        System.out.println(" - Dataset: " + this.testCase.dataset);
+        System.out.println(" - Utility measure: " + this.testCase.config.getMetric().toString());
+        System.out.println(" - Practical monotonicity: " + this.testCase.practical);
+        System.out.println(" - Suppression limit: " + this.testCase.config.getMaxOutliers());
+        System.out.println(" - Privacy model: " + getPrivacyModel(this.testCase.config));
         System.out.println(" - Performing experiment:");
         System.out.println("   * Warmup");
         long time = System.currentTimeMillis();
-        ARXResult result = anonymizer.anonymize(data, testCase.config);
+        ARXResult result = anonymizer.anonymize(data, this.testCase.config);
         System.out.println("   * Performed in: " + (System.currentTimeMillis() - time) + " [ms]");
-
+        
         // Collect statistics
         int[] statistics = new int[7];
         for (ARXNode[] level : result.getLattice().getLevels()) {
@@ -104,14 +105,13 @@ public abstract class AbstractTestExecutionTime extends AbstractAnonymizationTes
         for (int i = 0; i < 10; i++) {
             System.out.println("   * Repetition " + (i + 1) + " of 10");
             data.getHandle().release();
-            result = anonymizer.anonymize(data, testCase.config);
+            result = anonymizer.anonymize(data, this.testCase.config);
         }
         time = (System.currentTimeMillis() - time) / 10;
-
-
+        
         System.out.println("     -> Anonymization performed in: " + time + " [ms]");
     }
-
+    
     /**
      * Returns a string representing the privacy model
      */

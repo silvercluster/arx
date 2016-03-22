@@ -134,7 +134,7 @@ public class TestExamples {
             Assert.fail();
         }
     }
-
+    
     /**
      * Perform unit test based on the example
      */
@@ -147,7 +147,7 @@ public class TestExamples {
             Assert.fail();
         }
     }
-
+    
     /**
      * Perform unit test based on the example
      */
@@ -409,7 +409,7 @@ public class TestExamples {
             Assert.fail();
         }
     }
-
+    
     /**
      * Perform unit test based on the example
      */
@@ -422,7 +422,7 @@ public class TestExamples {
             Assert.fail();
         }
     }
-
+    
     /**
      * Perform unit test based on the example
      */
@@ -435,7 +435,7 @@ public class TestExamples {
             Assert.fail();
         }
     }
-
+    
     /**
      * Perform unit test based on the example
      */
@@ -448,7 +448,7 @@ public class TestExamples {
             Assert.fail();
         }
     }
-
+    
     /**
      * Perform unit test based on the example
      */
@@ -461,7 +461,7 @@ public class TestExamples {
             Assert.fail();
         }
     }
-
+    
     /**
      * Perform unit test based on the example
      */
@@ -474,7 +474,7 @@ public class TestExamples {
             Assert.fail();
         }
     }
-
+    
     /**
      * Perform unit test based on the example
      */
@@ -487,7 +487,7 @@ public class TestExamples {
             Assert.fail();
         }
     }
-
+    
     /**
      * Perform unit test based on the example
      */
@@ -500,7 +500,7 @@ public class TestExamples {
             Assert.fail();
         }
     }
-
+    
     /**
      * Perform unit test based on the example
      */
@@ -513,7 +513,7 @@ public class TestExamples {
             Assert.fail();
         }
     }
-
+    
     /**
      * Perform unit test based on the example
      */
@@ -526,7 +526,7 @@ public class TestExamples {
             Assert.fail();
         }
     }
-
+    
     /**
      * Perform unit test based on the example
      */
@@ -539,7 +539,7 @@ public class TestExamples {
             Assert.fail();
         }
     }
-
+    
     /**
      * Perform unit test based on the example
      */
@@ -552,7 +552,7 @@ public class TestExamples {
             Assert.fail();
         }
     }
-
+    
     /**
      * Perform unit test based on the example
      */

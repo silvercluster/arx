@@ -16,6 +16,7 @@
  */
 
 package org.deidentifier.arx.test;
+
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -46,22 +47,23 @@ public abstract class AbstractTestUtilityEstimation extends AbstractTestUtilityM
         super(testcase);
     }
     
+    @Override
     @Test
     public void test() throws IOException {
         
         // Anonymize
-        Data data = getDataObject(testcase);
+        Data data = getDataObject(this.testcase);
         ARXAnonymizer anonymizer = new ARXAnonymizer();
         
         // With suppression for anonymous transformation
-        ARXResult result = anonymizer.anonymize(data, testcase.config);
-        checkResult(testcase, result);
+        ARXResult result = anonymizer.anonymize(data, this.testcase.config);
+        checkResult(this.testcase, result);
         data.getHandle().release();
         
         // Without suppression for non-anonymous transformations
-        testcase.config.setSuppressionAlwaysEnabled(false);
-        result = anonymizer.anonymize(data, testcase.config);
-        checkResult(testcase, result);
+        this.testcase.config.setSuppressionAlwaysEnabled(false);
+        result = anonymizer.anonymize(data, this.testcase.config);
+        checkResult(this.testcase, result);
     }
     
     /**
@@ -142,10 +144,11 @@ public abstract class AbstractTestUtilityEstimation extends AbstractTestUtilityM
      * @return
      */
     private int compareWithTolerance(double d1, double d2) {
-        if (closeEnough(d1, d2))
+        if (closeEnough(d1, d2)) {
             return 0;
-        else
+        } else {
             return Double.compare(d1, d2);
+        }
     }
     
     /**

@@ -36,6 +36,7 @@ import org.deidentifier.arx.criteria.PrivacyCriterion;
 import org.deidentifier.arx.criteria.TCloseness;
 import org.deidentifier.arx.io.CSVHierarchyInput;
 import org.deidentifier.arx.metric.Metric;
+import org.deidentifier.arx.test.ConfigurationUtil.Dataset;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -57,19 +58,19 @@ public abstract class AbstractTestUtilityMetricsPrecomputation extends AbstractT
         
         /** TODO */
         public ARXConfiguration config;
-        
+                                
         /** TODO */
-        public String dataset;
-        
+        public Dataset          dataset;
+                                
         /** TODO */
-        public String sensitiveAttribute;
-        
+        public String           sensitiveAttribute;
+                                
         /** TODO */
-        public Metric<?> m1;
-        
+        public Metric<?>        m1;
+                                
         /** TODO */
-        public Metric<?> m2;
-        
+        public Metric<?>        m2;
+                                
         /**
          * Creates a new instance.
          *
@@ -81,7 +82,7 @@ public abstract class AbstractTestUtilityMetricsPrecomputation extends AbstractT
          */
         public ARXUtilityMetricsTestCase(final ARXConfiguration config,
                                          final String sensitiveAttribute,
-                                         final String dataset,
+                                         final Dataset dataset,
                                          final Metric<?> m1,
                                          final Metric<?> m2) {
             this.config = config;
@@ -99,13 +100,13 @@ public abstract class AbstractTestUtilityMetricsPrecomputation extends AbstractT
         public String getDescription() {
             StringBuilder builder = new StringBuilder();
             builder.append("TestCase{\n");
-            builder.append(" - Dataset: ").append(dataset).append("\n");
-            builder.append(" - Sensitive: ").append(sensitiveAttribute).append("\n");
-            builder.append(" - Suppression: ").append(config.getMaxOutliers()).append("\n");
-            builder.append(" - Metric1: ").append(m1.toString()).append("\n");
-            builder.append(" - Metric2: ").append(m2.toString()).append("\n");
+            builder.append(" - Dataset: ").append(this.dataset).append("\n");
+            builder.append(" - Sensitive: ").append(this.sensitiveAttribute).append("\n");
+            builder.append(" - Suppression: ").append(this.config.getMaxOutliers()).append("\n");
+            builder.append(" - Metric1: ").append(this.m1.toString()).append("\n");
+            builder.append(" - Metric2: ").append(this.m2.toString()).append("\n");
             builder.append(" - Criteria:\n");
-            for (PrivacyCriterion c : config.getCriteria()) {
+            for (PrivacyCriterion c : this.config.getCriteria()) {
                 builder.append("   * ").append(c.toString()).append("\n");
             }
             builder.append("}");
@@ -114,8 +115,8 @@ public abstract class AbstractTestUtilityMetricsPrecomputation extends AbstractT
         
         @Override
         public String toString() {
-            return config.getCriteria() + "-" + config.getMaxOutliers() + "-" + config.getMetric() + "-" + dataset + "-PM:" +
-                   config.isPracticalMonotonicity();
+            return this.config.getCriteria() + "-" + this.config.getMaxOutliers() + "-" + this.config.getMetric() + "-" + this.dataset + "-PM:" +
+                   this.config.isPracticalMonotonicity();
         }
     }
     
@@ -128,13 +129,13 @@ public abstract class AbstractTestUtilityMetricsPrecomputation extends AbstractT
      */
     public static Data getDataObject(final ARXUtilityMetricsTestCase testCase) throws IOException {
         
-        final Data data = Data.create(testCase.dataset, ';');
+        final Data data = Data.create(testCase.dataset.getDataPath(), ';');
         
         // Read generalization hierachies
         final FilenameFilter hierarchyFilter = new FilenameFilter() {
             @Override
             public boolean accept(final File dir, final String name) {
-                if (name.matches(testCase.dataset.substring(testCase.dataset.lastIndexOf("/") + 1, testCase.dataset.length() - 4) +
+                if (name.matches(testCase.dataset.getDataPath().substring(testCase.dataset.getDataPath().lastIndexOf("/") + 1, testCase.dataset.getDataPath().length() - 4) +
                                  "_hierarchy_(.)+.csv")) {
                     return true;
                 } else {
@@ -143,7 +144,7 @@ public abstract class AbstractTestUtilityMetricsPrecomputation extends AbstractT
             }
         };
         
-        final File testDir = new File(testCase.dataset.substring(0, testCase.dataset.lastIndexOf("/")));
+        final File testDir = new File(testCase.dataset.getDataPath().substring(0, testCase.dataset.getDataPath().lastIndexOf("/")));
         final File[] genHierFiles = testDir.listFiles(hierarchyFilter);
         final Pattern pattern = Pattern.compile("_hierarchy_(.*?).csv");
         
@@ -196,17 +197,17 @@ public abstract class AbstractTestUtilityMetricsPrecomputation extends AbstractT
         
         // Anonymize
         
-        ARXConfiguration testcaseconfig = testcase.config;
+        ARXConfiguration testcaseconfig = this.testcase.config;
         
         // Metric 1
-        testcaseconfig.setMetric(testcase.m1);
-        Data data1 = getDataObject(testcase);
+        testcaseconfig.setMetric(this.testcase.m1);
+        Data data1 = getDataObject(this.testcase);
         ARXAnonymizer anonymizer1 = new ARXAnonymizer();
         ARXResult result1 = anonymizer1.anonymize(data1, testcaseconfig);
         
         // Metric 2
-        testcaseconfig.setMetric(testcase.m2);
-        Data data2 = getDataObject(testcase);
+        testcaseconfig.setMetric(this.testcase.m2);
+        Data data2 = getDataObject(this.testcase);
         ARXAnonymizer anonymizer2 = new ARXAnonymizer();
         ARXResult result2 = anonymizer2.anonymize(data2, testcaseconfig);
         

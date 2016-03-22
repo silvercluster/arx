@@ -33,8 +33,8 @@ public abstract class AbstractTest {
      * 
      */
     public static enum TestMetric {
-        
-        /** TODO */
+                                   
+                                   /** TODO */
         DMSTAR,
                                    
                                    /** TODO */
@@ -58,7 +58,7 @@ public abstract class AbstractTest {
     
     @Before
     public void setUp() {
-        provider = new DataProvider();
+        this.provider = new DataProvider();
     }
     
     /**

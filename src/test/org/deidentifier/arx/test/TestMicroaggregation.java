@@ -181,7 +181,7 @@ public class TestMicroaggregation extends AbstractTest {
         final String[][] resultArray = resultToArray(result);
         
         final String[][] expectedArray = {
-                                           { "age", "gender", "zipcode" },  
+                                           { "age", "gender", "zipcode" },
                                            { "52", "male", "81***" },
                                            { "48", "female", "81***" },
                                            { "52", "male", "81***" },
@@ -190,7 +190,6 @@ public class TestMicroaggregation extends AbstractTest {
                                            { "52", "male", "81***" },
                                            { "52", "male", "81***" } };
                                            
-        
         assertTrue(Arrays.deepEquals(resultArray, expectedArray));
     }
 }

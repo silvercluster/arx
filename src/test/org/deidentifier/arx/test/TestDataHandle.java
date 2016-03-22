@@ -53,7 +53,7 @@ public class TestDataHandle extends AbstractTest {
     @Test
     public void testGetters() throws IllegalArgumentException, IOException {
         
-        final DataHandle inHandle = provider.getData().getHandle();
+        final DataHandle inHandle = this.provider.getData().getHandle();
         
         // Read the encoded data
         assertTrue(inHandle.getNumRows() == 7);
@@ -72,16 +72,16 @@ public class TestDataHandle extends AbstractTest {
     @Test
     public void testMultipleDataHandlesFork() throws IllegalArgumentException, IOException {
         
-        provider.createDataDefinition();
+        this.provider.createDataDefinition();
         final ARXAnonymizer anonymizer = new ARXAnonymizer();
-        final DataHandle inHandle = provider.getData().getHandle();
+        final DataHandle inHandle = this.provider.getData().getHandle();
         
         final ARXConfiguration config = ARXConfiguration.create();
         config.addCriterion(new KAnonymity(2));
         config.setMaxOutliers(0d);
         config.setSuppressionAlwaysEnabled(false);
         
-        final ARXResult result = anonymizer.anonymize(provider.getData(), config);
+        final ARXResult result = anonymizer.anonymize(this.provider.getData(), config);
         
         // get top and bottom node
         ARXLattice lattice = result.getLattice();
@@ -118,16 +118,16 @@ public class TestDataHandle extends AbstractTest {
     @Test
     public void testMultipleDataHandlesForkSync() throws IllegalArgumentException, IOException {
         
-        provider.createDataDefinition();
+        this.provider.createDataDefinition();
         final ARXAnonymizer anonymizer = new ARXAnonymizer();
-        final DataHandle inHandle = provider.getData().getHandle();
+        final DataHandle inHandle = this.provider.getData().getHandle();
         
         final ARXConfiguration config = ARXConfiguration.create();
         config.addCriterion(new KAnonymity(2));
         config.setMaxOutliers(0d);
         config.setSuppressionAlwaysEnabled(false);
         
-        final ARXResult result = anonymizer.anonymize(provider.getData(), config);
+        final ARXResult result = anonymizer.anonymize(this.provider.getData(), config);
         
         // get top and bottom node
         ARXLattice lattice = result.getLattice();
@@ -170,13 +170,13 @@ public class TestDataHandle extends AbstractTest {
     @Test
     public void testMultipleDataHandlesNoForkLocked() throws IllegalArgumentException, IOException {
         
-        provider.createDataDefinition();
+        this.provider.createDataDefinition();
         final ARXAnonymizer anonymizer = new ARXAnonymizer();
         final ARXConfiguration config = ARXConfiguration.create();
         config.addCriterion(new KAnonymity(2));
         config.setMaxOutliers(0d);
         
-        final ARXResult result = anonymizer.anonymize(provider.getData(), config);
+        final ARXResult result = anonymizer.anonymize(this.provider.getData(), config);
         
         // get top and bottom node
         ARXLattice lattice = result.getLattice();
@@ -207,13 +207,13 @@ public class TestDataHandle extends AbstractTest {
     @Test
     public void testMultipleDataHandlesNoForkOrphaned() throws IllegalArgumentException, IOException {
         
-        provider.createDataDefinition();
+        this.provider.createDataDefinition();
         final ARXAnonymizer anonymizer = new ARXAnonymizer();
         final ARXConfiguration config = ARXConfiguration.create();
         config.addCriterion(new KAnonymity(2));
         config.setMaxOutliers(0d);
         
-        final ARXResult result = anonymizer.anonymize(provider.getData(), config);
+        final ARXResult result = anonymizer.anonymize(this.provider.getData(), config);
         
         // get top and bottom node
         ARXLattice lattice = result.getLattice();
@@ -248,15 +248,15 @@ public class TestDataHandle extends AbstractTest {
     @Test
     public void testSorting() throws IllegalArgumentException, IOException {
         
-        provider.createDataDefinition();
+        this.provider.createDataDefinition();
         final ARXAnonymizer anonymizer = new ARXAnonymizer();
         final ARXConfiguration config = ARXConfiguration.create();
         config.addCriterion(new KAnonymity(2));
         config.setMaxOutliers(0d);
         
-        final ARXResult result = anonymizer.anonymize(provider.getData(), config);
+        final ARXResult result = anonymizer.anonymize(this.provider.getData(), config);
         final DataHandle outHandle = result.getOutput(false);
-        final DataHandle inHandle = provider.getData().getHandle();
+        final DataHandle inHandle = this.provider.getData().getHandle();
         inHandle.sort(true, 0);
         
         final String[][] inArray = iteratorToArray(inHandle.iterator());
@@ -280,18 +280,18 @@ public class TestDataHandle extends AbstractTest {
     @Test
     public void testStableSorting() throws IllegalArgumentException, IOException {
         
-        provider.createDataDefinition();
+        this.provider.createDataDefinition();
         final ARXAnonymizer anonymizer = new ARXAnonymizer();
-        final DataHandle inHandle = provider.getData().getHandle();
+        final DataHandle inHandle = this.provider.getData().getHandle();
         
         // Alter the definition
-        provider.getData().getDefinition().setAttributeType("gender", AttributeType.IDENTIFYING_ATTRIBUTE);
+        this.provider.getData().getDefinition().setAttributeType("gender", AttributeType.IDENTIFYING_ATTRIBUTE);
         
         final ARXConfiguration config = ARXConfiguration.create();
         config.addCriterion(new KAnonymity(2));
         config.setMaxOutliers(0d);
         
-        final ARXResult result = anonymizer.anonymize(provider.getData(), config);
+        final ARXResult result = anonymizer.anonymize(this.provider.getData(), config);
         final DataHandle outHandle = result.getOutput(false);
         outHandle.sort(true, 2);
         
@@ -316,23 +316,23 @@ public class TestDataHandle extends AbstractTest {
     @Test
     public void testSubset1() throws IllegalArgumentException, IOException {
         
-        provider.createDataDefinition();
+        this.provider.createDataDefinition();
         final ARXAnonymizer anonymizer = new ARXAnonymizer();
-        final DataHandle inHandle = provider.getData().getHandle();
+        final DataHandle inHandle = this.provider.getData().getHandle();
         
         // Alter the definition
-        provider.getData().getDefinition().setAttributeType("gender", AttributeType.IDENTIFYING_ATTRIBUTE);
+        this.provider.getData().getDefinition().setAttributeType("gender", AttributeType.IDENTIFYING_ATTRIBUTE);
         
-        DataSelector selector = DataSelector.create(provider.getData()).field("age").equals("70").or().equals("34");
+        DataSelector selector = DataSelector.create(this.provider.getData()).field("age").equals("70").or().equals("34");
         
-        DataSubset subset = DataSubset.create(provider.getData(), selector);
+        DataSubset subset = DataSubset.create(this.provider.getData(), selector);
         
         final ARXConfiguration config = ARXConfiguration.create();
         config.addCriterion(new KAnonymity(2));
         config.addCriterion(new DPresence(0, 1, subset));
         config.setMaxOutliers(0d);
         
-        final ARXResult result = anonymizer.anonymize(provider.getData(), config);
+        final ARXResult result = anonymizer.anonymize(this.provider.getData(), config);
         final DataHandle outHandle = result.getOutput(false);
         outHandle.sort(true, 2);
         
@@ -354,22 +354,22 @@ public class TestDataHandle extends AbstractTest {
     @Test
     public void testSubset2() throws IllegalArgumentException, IOException {
         
-        provider.createDataDefinition();
+        this.provider.createDataDefinition();
         final ARXAnonymizer anonymizer = new ARXAnonymizer();
         
         // Alter the definition
-        provider.getData().getDefinition().setAttributeType("gender", AttributeType.IDENTIFYING_ATTRIBUTE);
+        this.provider.getData().getDefinition().setAttributeType("gender", AttributeType.IDENTIFYING_ATTRIBUTE);
         
-        DataSelector selector = DataSelector.create(provider.getData()).field("age").equals("70").or().equals("34");
+        DataSelector selector = DataSelector.create(this.provider.getData()).field("age").equals("70").or().equals("34");
         
-        DataSubset subset = DataSubset.create(provider.getData(), selector);
+        DataSubset subset = DataSubset.create(this.provider.getData(), selector);
         
         final ARXConfiguration config = ARXConfiguration.create();
         config.addCriterion(new KAnonymity(2));
         config.addCriterion(new DPresence(0, 1, subset));
         config.setMaxOutliers(0d);
         
-        final ARXResult result = anonymizer.anonymize(provider.getData(), config);
+        final ARXResult result = anonymizer.anonymize(this.provider.getData(), config);
         final DataHandle outHandle = result.getOutput(false);
         outHandle.sort(true, 2);
         

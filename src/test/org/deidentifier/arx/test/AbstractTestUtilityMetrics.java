@@ -39,6 +39,7 @@ import org.deidentifier.arx.criteria.LDiversity;
 import org.deidentifier.arx.criteria.PrivacyCriterion;
 import org.deidentifier.arx.criteria.TCloseness;
 import org.deidentifier.arx.io.CSVHierarchyInput;
+import org.deidentifier.arx.test.ConfigurationUtil.Dataset;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -59,17 +60,17 @@ public abstract class AbstractTestUtilityMetrics extends AbstractTest {
     public static class ARXUtilityMetricsTestCase {
         
         /** TODO */
-        public ARXConfiguration config;
-        
+        public ARXConfiguration    config;
+                                   
         /** TODO */
-        public String dataset;
-        
+        public Dataset             dataset;
+                                   
         /** TODO */
-        public String sensitiveAttribute;
-        
+        public String              sensitiveAttribute;
+                                   
         /** TODO */
         public Map<String, String> informationLoss;
-        
+                                   
         /**
          * Creates a new instance.
          *
@@ -80,7 +81,7 @@ public abstract class AbstractTestUtilityMetrics extends AbstractTest {
          */
         public ARXUtilityMetricsTestCase(final ARXConfiguration config,
                                          final String sensitiveAttribute,
-                                         final String dataset,
+                                         final Dataset dataset,
                                          final String... informationLoss) {
             this.config = config;
             this.sensitiveAttribute = sensitiveAttribute;
@@ -101,12 +102,12 @@ public abstract class AbstractTestUtilityMetrics extends AbstractTest {
         public String getDescription() {
             StringBuilder builder = new StringBuilder();
             builder.append("TestCase{\n");
-            builder.append(" - Dataset: ").append(dataset).append("\n");
-            builder.append(" - Sensitive: ").append(sensitiveAttribute).append("\n");
-            builder.append(" - Suppression: ").append(config.getMaxOutliers()).append("\n");
-            builder.append(" - Metric: ").append(config.getMetric().toString()).append("\n");
+            builder.append(" - Dataset: ").append(this.dataset).append("\n");
+            builder.append(" - Sensitive: ").append(this.sensitiveAttribute).append("\n");
+            builder.append(" - Suppression: ").append(this.config.getMaxOutliers()).append("\n");
+            builder.append(" - Metric: ").append(this.config.getMetric().toString()).append("\n");
             builder.append(" - Criteria:\n");
-            for (PrivacyCriterion c : config.getCriteria()) {
+            for (PrivacyCriterion c : this.config.getCriteria()) {
                 builder.append("   * ").append(c.toString()).append("\n");
             }
             builder.append("}");
@@ -115,8 +116,8 @@ public abstract class AbstractTestUtilityMetrics extends AbstractTest {
         
         @Override
         public String toString() {
-            return config.getCriteria() + "-" + config.getMaxOutliers() + "-" + config.getMetric() + "-" + dataset + "-PM:" +
-                   config.isPracticalMonotonicity();
+            return this.config.getCriteria() + "-" + this.config.getMaxOutliers() + "-" + this.config.getMetric() + "-" + this.dataset + "-PM:" +
+                   this.config.isPracticalMonotonicity();
         }
     }
     
@@ -129,13 +130,13 @@ public abstract class AbstractTestUtilityMetrics extends AbstractTest {
      */
     public static Data getDataObject(final ARXUtilityMetricsTestCase testCase) throws IOException {
         
-        final Data data = Data.create(testCase.dataset, ';');
+        final Data data = Data.create(testCase.dataset.getDataPath(), ';');
         
         // Read generalization hierachies
         final FilenameFilter hierarchyFilter = new FilenameFilter() {
             @Override
             public boolean accept(final File dir, final String name) {
-                if (name.matches(testCase.dataset.substring(testCase.dataset.lastIndexOf("/") + 1, testCase.dataset.length() - 4) +
+                if (name.matches(testCase.dataset.getDataPath().substring(testCase.dataset.getDataPath().lastIndexOf("/") + 1, testCase.dataset.getDataPath().length() - 4) +
                                  "_hierarchy_(.)+.csv")) {
                     return true;
                 } else {
@@ -144,7 +145,7 @@ public abstract class AbstractTestUtilityMetrics extends AbstractTest {
             }
         };
         
-        final File testDir = new File(testCase.dataset.substring(0, testCase.dataset.lastIndexOf("/")));
+        final File testDir = new File(testCase.dataset.getDataPath().substring(0, testCase.dataset.getDataPath().lastIndexOf("/")));
         final File[] genHierFiles = testDir.listFiles(hierarchyFilter);
         final Pattern pattern = Pattern.compile("_hierarchy_(.*?).csv");
         
@@ -196,16 +197,16 @@ public abstract class AbstractTestUtilityMetrics extends AbstractTest {
     public void test() throws IOException {
         
         // Anonymize
-        Data data = getDataObject(testcase);
+        Data data = getDataObject(this.testcase);
         ARXAnonymizer anonymizer = new ARXAnonymizer();
-        ARXResult result = anonymizer.anonymize(data, testcase.config);
+        ARXResult result = anonymizer.anonymize(data, this.testcase.config);
         
         // Test information loss for some transformations
         for (ARXNode[] level : result.getLattice().getLevels()) {
             for (ARXNode node : level) {
                 
                 String label = Arrays.toString(node.getTransformation());
-                String loss = testcase.informationLoss.get(label);
+                String loss = this.testcase.informationLoss.get(label);
                 
                 if (loss != null) {
                     if (node.getMaximumInformationLoss().compareTo(node.getMinimumInformationLoss()) != 0) {
@@ -213,7 +214,7 @@ public abstract class AbstractTestUtilityMetrics extends AbstractTest {
                     }
                     
                     String actualLoss = node.getMaximumInformationLoss().toString();
-                    String expectedLoss = testcase.informationLoss.get(label);
+                    String expectedLoss = this.testcase.informationLoss.get(label);
                     
                     assertEquals(label, expectedLoss, actualLoss);
                 }

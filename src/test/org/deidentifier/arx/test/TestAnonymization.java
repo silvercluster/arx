@@ -67,8 +67,8 @@ public class TestAnonymization extends AbstractTest {
     @Test
     public void testAllAttributesIdentifying() throws IOException {
         try {
-            provider.createDataDefinition();
-            final Data data = provider.getData();
+            this.provider.createDataDefinition();
+            final Data data = this.provider.getData();
             data.getDefinition().setAttributeType("age", AttributeType.IDENTIFYING_ATTRIBUTE);
             data.getDefinition().setAttributeType("gender", AttributeType.IDENTIFYING_ATTRIBUTE);
             data.getDefinition().setAttributeType("zipcode", AttributeType.IDENTIFYING_ATTRIBUTE);
@@ -78,7 +78,7 @@ public class TestAnonymization extends AbstractTest {
             config.setSuppressionString("*");
             config.addCriterion(new KAnonymity(2));
             config.setMaxOutliers(0d);
-            anonymizer.anonymize(provider.getData(), config);
+            anonymizer.anonymize(this.provider.getData(), config);
             
         } catch (final IllegalArgumentException e) {
             return;
@@ -95,8 +95,8 @@ public class TestAnonymization extends AbstractTest {
     @Test
     public void testAllAttributesInsensitive() throws IOException {
         try {
-            provider.createDataDefinition();
-            final Data data = provider.getData();
+            this.provider.createDataDefinition();
+            final Data data = this.provider.getData();
             data.getDefinition().setAttributeType("age", AttributeType.INSENSITIVE_ATTRIBUTE);
             data.getDefinition().setAttributeType("gender", AttributeType.INSENSITIVE_ATTRIBUTE);
             data.getDefinition().setAttributeType("zipcode", AttributeType.INSENSITIVE_ATTRIBUTE);
@@ -105,7 +105,7 @@ public class TestAnonymization extends AbstractTest {
             final ARXConfiguration config = ARXConfiguration.create();
             config.addCriterion(new KAnonymity(2));
             config.setMaxOutliers(0d);
-            anonymizer.anonymize(provider.getData(), config);
+            anonymizer.anonymize(this.provider.getData(), config);
             
         } catch (final IllegalArgumentException e) {
             return;
@@ -124,8 +124,8 @@ public class TestAnonymization extends AbstractTest {
         try {
             
             final ARXAnonymizer anonymizer = new ARXAnonymizer();
-            provider.createDataDefinition();
-            final Data data = provider.getData();
+            this.provider.createDataDefinition();
+            final Data data = this.provider.getData();
             data.getDefinition().setAttributeType("age", AttributeType.SENSITIVE_ATTRIBUTE);
             data.getDefinition().setAttributeType("gender", AttributeType.SENSITIVE_ATTRIBUTE);
             data.getDefinition().setAttributeType("zipcode", AttributeType.SENSITIVE_ATTRIBUTE);
@@ -133,7 +133,7 @@ public class TestAnonymization extends AbstractTest {
             final ARXConfiguration config = ARXConfiguration.create();
             config.addCriterion(new KAnonymity(2));
             config.setMaxOutliers(-0.2d);
-            anonymizer.anonymize(provider.getData(), config);
+            anonymizer.anonymize(this.provider.getData(), config);
         } catch (final IllegalArgumentException e) {
             return;
         }
@@ -244,14 +244,14 @@ public class TestAnonymization extends AbstractTest {
      */
     @Test
     public void testHierarchyWithHeightOne() throws IllegalArgumentException, IOException {
-        provider.createDataDefinitionWithHeightOne();
+        this.provider.createDataDefinitionWithHeightOne();
         
         final ARXAnonymizer anonymizer = new ARXAnonymizer();
         final ARXConfiguration config = ARXConfiguration.create();
         config.setSuppressionString("*");
         config.addCriterion(new KAnonymity(2));
         config.setMaxOutliers(0d);
-        ARXResult result = anonymizer.anonymize(provider.getData(), config);
+        ARXResult result = anonymizer.anonymize(this.provider.getData(), config);
         assertFalse(result.isResultAvailable());
     }
     
@@ -263,14 +263,14 @@ public class TestAnonymization extends AbstractTest {
     @Test
     public void testKAnonymizationWithoutOutliers() throws IOException {
         
-        provider.createDataDefinition();
+        this.provider.createDataDefinition();
         
         final ARXAnonymizer anonymizer = new ARXAnonymizer();
         final ARXConfiguration config = ARXConfiguration.create();
         config.setSuppressionString("*");
         config.addCriterion(new KAnonymity(2));
         config.setMaxOutliers(0d);
-        final String[][] result = resultToArray(anonymizer.anonymize(provider.getData(), config));
+        final String[][] result = resultToArray(anonymizer.anonymize(this.provider.getData(), config));
         
         final String[][] expected = {
                                       { "age", "gender", "zipcode" },
@@ -293,8 +293,8 @@ public class TestAnonymization extends AbstractTest {
     @Test
     public void testLDiversityDistinctWithoutOutliers() throws IOException {
         
-        provider.createDataDefinition();
-        final Data data = provider.getData();
+        this.provider.createDataDefinition();
+        final Data data = this.provider.getData();
         data.getDefinition().setAttributeType("age", AttributeType.SENSITIVE_ATTRIBUTE);
         
         final ARXAnonymizer anonymizer = new ARXAnonymizer();
@@ -326,8 +326,8 @@ public class TestAnonymization extends AbstractTest {
     @Test
     public void testLDiversityEntropyWithoutOutliers() throws IOException {
         
-        provider.createDataDefinition();
-        final Data data = provider.getData();
+        this.provider.createDataDefinition();
+        final Data data = this.provider.getData();
         data.getDefinition().setAttributeType("age", AttributeType.SENSITIVE_ATTRIBUTE);
         
         final ARXAnonymizer anonymizer = new ARXAnonymizer();
@@ -359,8 +359,8 @@ public class TestAnonymization extends AbstractTest {
     @Test
     public void testLDiversityWithoutOutliers() throws IOException {
         
-        provider.createDataDefinition();
-        final Data data = provider.getData();
+        this.provider.createDataDefinition();
+        final Data data = this.provider.getData();
         data.getDefinition().setAttributeType("age", AttributeType.SENSITIVE_ATTRIBUTE);
         
         final ARXAnonymizer anonymizer = new ARXAnonymizer();
@@ -395,8 +395,8 @@ public class TestAnonymization extends AbstractTest {
         try {
             
             final ARXAnonymizer anonymizer = new ARXAnonymizer();
-            provider.createDataDefinition();
-            final Data data = provider.getData();
+            this.provider.createDataDefinition();
+            final Data data = this.provider.getData();
             data.getDefinition().setAttributeType("gender", AttributeType.SENSITIVE_ATTRIBUTE);
             data.getDefinition().setAttributeType("zipcode", AttributeType.SENSITIVE_ATTRIBUTE);
             
@@ -419,8 +419,8 @@ public class TestAnonymization extends AbstractTest {
     @Test
     public void testMultipleUsesOfDataDefinition() throws IOException {
         
-        provider.createDataDefinition();
-        final Data data = provider.getData();
+        this.provider.createDataDefinition();
+        final Data data = this.provider.getData();
         
         final ARXAnonymizer anonymizer = new ARXAnonymizer();
         ARXConfiguration config = ARXConfiguration.create();
@@ -478,7 +478,7 @@ public class TestAnonymization extends AbstractTest {
      */
     @Test
     public void testSaveData() throws IOException {
-        final Data data = provider.data;
+        final Data data = this.provider.data;
         data.getHandle().save(new File("junit_test_data.csv"), ';');
     }
     
@@ -489,7 +489,7 @@ public class TestAnonymization extends AbstractTest {
      */
     @Test
     public void testSaveHierarchy() throws IOException {
-        final Hierarchy hier = provider.age;
+        final Hierarchy hier = this.provider.age;
         hier.save(new File("junit_test_hierarchy_age.csv"), ';');
     }
     
