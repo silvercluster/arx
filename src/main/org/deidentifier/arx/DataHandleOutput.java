@@ -30,6 +30,7 @@ import org.deidentifier.arx.framework.data.Data;
 import org.deidentifier.arx.framework.data.DataManager;
 import org.deidentifier.arx.framework.data.DataManager.AttributeTypeInternal;
 import org.deidentifier.arx.framework.data.Dictionary;
+import org.deidentifier.arx.metric.QualityMeasureBuilder;
 
 /**
  * An implementation of the class DataHandle for output data.
@@ -85,41 +86,47 @@ public class DataHandleOutput extends DataHandle {
     }
 
     /** The data. */
-    private Data         inputAnalyzed;
+    private Data                   inputAnalyzed;
 
     /** The data. */
-    private Data         inputStatic;
+    private Data                   inputStatic;
 
     /** An inverse map to data arrays. */
-    private int[][][]    inverseData;
+    private int[][][]              inverseData;
 
     /** An inverse map to dictionaries. */
-    private Dictionary[] inverseDictionaries;
+    private Dictionary[]           inverseDictionaries;
 
     /** An inverse map for column indices. map[i*2]=attribute type, map[i*2+1]=index position. */
-    private int[]        inverseMap;
+    private int[]                  inverseMap;
 
     /** The start index of the MA attributes in the dataDI */
-    private final int    microaggregationStartIndex;
+    private final int              microaggregationStartIndex;
 
     /** The data. */
-    private Data         outputGeneralized;
+    private Data                   outputGeneralized;
 
     /** The data. */
-    private Data         outputMicroaggregated;
+    private Data                   outputMicroaggregated;
 
     /** The current result. */
-    private ARXResult    result;
+    private ARXResult              result;
 
     /** Suppression handling. */
-    private final int    suppressedAttributeTypes;
+    private final int              suppressedAttributeTypes;
 
     /** Flag determining whether this buffer has been optimized */
-    private boolean      optimized = false;
+    private boolean                optimized = false;
 
     /** Flag determining whether this buffer is anonymous */
-    private boolean      anonymous = false;
-    
+    private boolean                anonymous = false;
+
+    /** The config */
+    private final ARXConfiguration config;
+
+    /** The data manager */
+    private final DataManager      manager;
+
     /**
      * Instantiates a new handle.
      * 
@@ -145,6 +152,8 @@ public class DataHandleOutput extends DataHandle {
         this.setRegistry(registry);
         
         // Init
+        this.config = config;
+        this.manager = manager;
         this.suppressedAttributeTypes = convert(config.getSuppressedAttributeTypes());
         this.result = result;
         this.definition = definition;
@@ -321,9 +330,9 @@ public class DataHandleOutput extends DataHandle {
      * @param data
      * @param types
      */
-    public void updateData(DataHandle data, 
-                           Map<String, DataType<?>> types,
-                           int[] outliers) {
+    protected void updateData(DataHandle data,
+                              Map<String, DataType<?>> types,
+                              int[] outliers) {
 
         updateData(data, outputGeneralized, types, outliers);
         updateData(data, outputMicroaggregated, types, outliers);
@@ -755,5 +764,14 @@ public class DataHandleOutput extends DataHandle {
                 }
             }
         }
+    }
+
+    @Override
+    public QualityMeasureBuilder getQualityMeasures() {
+        return new QualityMeasureBuilder(new DataHandleInternal(this),
+                                         this.manager,
+                                         this.getDefinition(),
+                                         this.config,
+                                         this.config.getInternalConfiguration());
     }
 }

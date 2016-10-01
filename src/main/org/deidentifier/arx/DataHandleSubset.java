@@ -22,6 +22,7 @@ import java.util.Set;
 
 import org.deidentifier.arx.DataHandleInternal.InterruptHandler;
 import org.deidentifier.arx.aggregates.StatisticsBuilder;
+import org.deidentifier.arx.metric.QualityMeasureBuilder;
 
 
 /**
@@ -33,7 +34,7 @@ public class DataHandleSubset extends DataHandle {
     
     /** The original data handle. */
     private final DataHandle source;
-    
+
     /** The research subset. */
     private final DataSubset subset;
     
@@ -51,19 +52,19 @@ public class DataHandleSubset extends DataHandle {
         this.subset = subset;
         this.statistics = new StatisticsBuilder(new DataHandleInternal(this));
     }
-
+    
     @Override
     public String getAttributeName(int col) {
         checkRegistry();
         return source.getAttributeName(col);
     }
-    
+
     @Override
     public DataType<?> getDataType(String attribute) {
         checkRegistry();
         return source.getDataType(attribute);
     }
-
+    
     @Override
     public int getGeneralization(String attribute) {
         checkRegistry();
@@ -80,6 +81,11 @@ public class DataHandleSubset extends DataHandle {
     public int getNumRows() {
         checkRegistry();
         return this.subset.getArray().length;
+    }
+
+    @Override
+    public QualityMeasureBuilder getQualityMeasures() {
+        return source.getQualityMeasures();
     }
 
     /**

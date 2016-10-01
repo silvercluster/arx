@@ -44,6 +44,7 @@ import org.deidentifier.arx.DataType.DataTypeDescription;
 import org.deidentifier.arx.aggregates.StatisticsBuilder;
 import org.deidentifier.arx.io.CSVDataOutput;
 import org.deidentifier.arx.io.CSVSyntax;
+import org.deidentifier.arx.metric.QualityMeasureBuilder;
 import org.deidentifier.arx.risk.RiskEstimateBuilder;
 import org.deidentifier.arx.risk.RiskModelHistogram;
 
@@ -460,6 +461,12 @@ public abstract class DataHandle {
     public abstract int getNumRows();
 
     /**
+     * Returns a set of quality measures for the given handle
+     * @return
+     */
+    public abstract QualityMeasureBuilder getQualityMeasures();
+    
+    /**
      * Returns a risk estimator
      * @param model
      * @return
@@ -467,7 +474,7 @@ public abstract class DataHandle {
     public RiskEstimateBuilder getRiskEstimator(ARXPopulationModel model) {
         return getRiskEstimator(model, getDefinition().getQuasiIdentifyingAttributes());
     }
-    
+
     /**
      * Returns a risk estimator
      * @param model
@@ -908,7 +915,7 @@ public abstract class DataHandle {
      * @return the distinct values
      */
     protected abstract String[] getDistinctValues(int column, boolean ignoreSuppression, InterruptHandler handler);
-
+    
     /**
      * Returns the registry associated with this handle.
      *

@@ -25,6 +25,7 @@ import java.util.List;
 import org.deidentifier.arx.DataHandleInternal.InterruptHandler;
 import org.deidentifier.arx.aggregates.StatisticsBuilder;
 import org.deidentifier.arx.framework.data.Dictionary;
+import org.deidentifier.arx.metric.QualityMeasureBuilder;
 
 /**
  * An implementation of the DataHandle interface for input data.
@@ -338,5 +339,10 @@ public class DataHandleInput extends DataHandle {
         this.dataGH = dataGH;
         this.dataDI = dataDI;
         this.dataIS = dataIS;
+    }
+
+    @Override
+    public QualityMeasureBuilder getQualityMeasures() {
+        return new QualityMeasureBuilder();
     }
 }
