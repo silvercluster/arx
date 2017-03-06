@@ -29,7 +29,6 @@ import org.deidentifier.arx.framework.data.GeneralizationHierarchy;
 import org.deidentifier.arx.framework.lattice.Transformation;
 import org.deidentifier.arx.metric.InformationLossWithBound;
 import org.deidentifier.arx.metric.MetricConfiguration;
-import org.deidentifier.arx.metric.MetricConfiguration.MetricConfigurationAttackerModel;
 import org.deidentifier.arx.risk.RiskModelCostBenefit;
 
 /**
@@ -120,9 +119,7 @@ public class MetricSDNMPublisherPayout extends AbstractMetricSingleDimensional {
                                        super.getGeneralizationSuppressionFactor(), // gs-factor
                                        false, 
                                        0.0d, 
-                                       this.getAggregateFunction(),
-                                       this.journalistAttackerModel ? MetricConfigurationAttackerModel.JOURNALIST : 
-                                                                      MetricConfigurationAttackerModel.PROSECUTOR);
+                                       this.getAggregateFunction());
     }
     
     /**
@@ -224,7 +221,7 @@ public class MetricSDNMPublisherPayout extends AbstractMetricSingleDimensional {
         result.getInformationLoss().addMetadata(maximalPayout);
         return result;
     }
-
+    
     @Override
     protected InformationLossWithBound<ILSingleDimensional> getInformationLossInternal(Transformation transformation, HashGroupifyEntry entry) {
 
@@ -252,7 +249,7 @@ public class MetricSDNMPublisherPayout extends AbstractMetricSingleDimensional {
         // Return
         return super.createInformationLoss(real, bound);
     }
-    
+
     @Override
     protected ILSingleDimensional getLowerBoundInternal(Transformation transformation) {
         return null;
