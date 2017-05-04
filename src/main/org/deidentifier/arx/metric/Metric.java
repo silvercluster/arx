@@ -52,6 +52,7 @@ import org.deidentifier.arx.metric.v2.MetricMDNUNMNormalizedEntropy;
 import org.deidentifier.arx.metric.v2.MetricMDNUNMNormalizedEntropyPotentiallyPrecomputed;
 import org.deidentifier.arx.metric.v2.MetricMDNUNMNormalizedEntropyPrecomputed;
 import org.deidentifier.arx.metric.v2.MetricMDPrecision;
+import org.deidentifier.arx.metric.v2.MetricNormalizedEuclideanDistance;
 import org.deidentifier.arx.metric.v2.MetricSDAECS;
 import org.deidentifier.arx.metric.v2.MetricSDDiscernability;
 import org.deidentifier.arx.metric.v2.MetricSDNMAmbiguity;
@@ -422,6 +423,15 @@ public abstract class Metric<T extends InformationLoss<?>> implements Serializab
      */
     public static Metric<AbstractILMultiDimensional> createNormalizedEntropyMetric(AggregateFunction function) {
         return __MetricV2.createNormalizedEntropyMetric(function);
+    }
+    
+    /**
+     * Creates a new instance of the normalized euclidean distance metric.
+     * 
+     * @return
+     */
+    public static Metric<ILSingleDimensional> createNormalizedEuclideanDistanceMetric() {
+        return __MetricV2.createNormalizedEuclideanDistanceMetric();
     }
 
     /**
@@ -1108,7 +1118,27 @@ public abstract class Metric<T extends InformationLoss<?>> implements Serializab
                                      public boolean isInstance(Metric<?> metric) {
                                          return (metric instanceof MetricSDNMEntropyBasedInformationLoss);
                                      } 
-               }
+               },
+               new MetricDescription("Normalized Euclidean Distance",
+                                     false,  // monotonic variant supported
+                                     false,  // attribute weights supported
+                                     true,   // configurable coding model supported
+                                     false,  // pre-computation supported
+                                     false,  // aggregate function supported
+                                     false){ // attacker model supported
+
+                                     private static final long serialVersionUID = -8432852977438469251L;
+
+                                    @Override
+                                     public Metric<?> createInstance(MetricConfiguration config) {
+                                         return createNormalizedEuclideanDistanceMetric();
+                                     }
+
+                                    @Override
+                                    public boolean isInstance(Metric<?> metric) {
+                                        return (metric instanceof MetricNormalizedEuclideanDistance);
+                                    } 
+               },
         });
     }
 

@@ -404,6 +404,15 @@ public class __MetricV2 {
     public static Metric<AbstractILMultiDimensional> createNormalizedEntropyMetric(AggregateFunction function) {
         return new MetricMDNUNMNormalizedEntropy(function);
     }
+    
+    /**
+     * Creates an instance of the normalized euclidean distance metric.
+     * 
+     * @return
+     */
+    public static Metric<ILSingleDimensional> createNormalizedEuclideanDistanceMetric() {
+        return new MetricNormalizedEuclideanDistance();
+    }
 
     /**
      * Creates an instance of the non-monotonic precision metric.
