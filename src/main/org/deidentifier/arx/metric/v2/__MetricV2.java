@@ -411,7 +411,7 @@ public class __MetricV2 {
      * @return
      */
     public static Metric<ILSingleDimensional> createNormalizedEuclideanDistanceMetric() {
-        return new MetricNormalizedEuclideanDistance();
+        return new MetricSDNormalizedEuclideanDistance();
     }
 
     /**

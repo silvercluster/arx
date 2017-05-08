@@ -52,7 +52,7 @@ import org.deidentifier.arx.metric.v2.MetricMDNUNMNormalizedEntropy;
 import org.deidentifier.arx.metric.v2.MetricMDNUNMNormalizedEntropyPotentiallyPrecomputed;
 import org.deidentifier.arx.metric.v2.MetricMDNUNMNormalizedEntropyPrecomputed;
 import org.deidentifier.arx.metric.v2.MetricMDPrecision;
-import org.deidentifier.arx.metric.v2.MetricNormalizedEuclideanDistance;
+import org.deidentifier.arx.metric.v2.MetricSDNormalizedEuclideanDistance;
 import org.deidentifier.arx.metric.v2.MetricSDAECS;
 import org.deidentifier.arx.metric.v2.MetricSDDiscernability;
 import org.deidentifier.arx.metric.v2.MetricSDNMAmbiguity;
@@ -1136,7 +1136,7 @@ public abstract class Metric<T extends InformationLoss<?>> implements Serializab
 
                                     @Override
                                     public boolean isInstance(Metric<?> metric) {
-                                        return (metric instanceof MetricNormalizedEuclideanDistance);
+                                        return (metric instanceof MetricSDNormalizedEuclideanDistance);
                                     } 
                },
         });
