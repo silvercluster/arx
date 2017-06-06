@@ -42,7 +42,7 @@ public class DataMatrixSubset extends DataMatrix {
     }
 
     @Override
-    public void and(int row, long value) {
+    public void and(int row, int value) {
         matrix.and(subset[row], value);
     }
 
@@ -67,18 +67,8 @@ public class DataMatrixSubset extends DataMatrix {
     }
 
     @Override
-    public void free() {
-        // Nothing to do
-    }
-
-    @Override
     public int get(int row, int col) {
         return matrix.get(subset[row], col);
-    }
-
-    @Override
-    public ExclusiveRowIterator getExclusiveIterator(int row) {
-       return new ExclusiveRowIterator(subset[row]); 
     }
 
     @Override
@@ -102,47 +92,27 @@ public class DataMatrixSubset extends DataMatrix {
     }
 
     @Override
-    public void iterator1(int row) {
-        matrix.iterator1(subset[row]);
+    public void iterator(int row) {
+        matrix.iterator(subset[row]);
     }
 
     @Override
-    public boolean iterator1_hasNext() {
-        return matrix.iterator1_hasNext();
+    public boolean iterator_hasNext() {
+        return matrix.iterator_hasNext();
     }
 
     @Override
-    public int iterator1_next() {
-        return matrix.iterator1_next();
+    public int iterator_next() {
+        return matrix.iterator_next();
     }
 
     @Override
-    public void iterator1_write(int value) {
-        matrix.iterator1_write(value);
+    public void iterator_write(int value) {
+        matrix.iterator_write(value);
     }
 
     @Override
-    public void iterator2(int row) {
-        matrix.iterator2(subset[row]);
-    }
-
-    @Override
-    public boolean iterator2_hasNext() {
-        return matrix.iterator2_hasNext();
-    }
-
-    @Override
-    public int iterator2_next() {
-        return matrix.iterator2_next();
-    }
-
-    @Override
-    public void iterator2_write(int value) {
-        matrix.iterator2_write(value);
-    }
-
-    @Override
-    public void or(int row, long value) {
+    public void or(int row, int value) {
         matrix.or(subset[row], value);
     }
 
@@ -168,10 +138,5 @@ public class DataMatrixSubset extends DataMatrix {
     @Override
     public void swap(int row1, int row2) {
         matrix.swap(subset[row1], subset[row2]);
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        // Nothing to do
     }
 }
